@@ -120,10 +120,8 @@ public enum DKImagePickerControllerSourceType : Int {
  */
 open class DKImagePickerController : UINavigationController {
 
-	lazy private(set) public var UIDelegate: DKImagePickerControllerUIDelegate = {
-		return DKImagePickerControllerDefaultUIDelegate()
-	}()
-
+    public var UIDelegate: DKImagePickerControllerUIDelegate = DKImagePickerControllerDefaultUIDelegate()
+    
     /// Forces selection of tapped image immediatly.
 	public var singleSelect = false
 		
