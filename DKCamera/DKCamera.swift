@@ -116,7 +116,7 @@ open class DKCamera: UIViewController, AVCaptureMetadataOutputObjectsDelegate {
     open var currentOrientation: UIDeviceOrientation!
     open let motionManager = CMMotionManager()
     
-    open lazy var flashButton: UIButton = {
+    open lazy private(set) var flashButton: UIButton = {
         let flashButton = UIButton()
         flashButton.addTarget(self, action: #selector(DKCamera.switchFlashMode), for: .touchUpInside)
         

@@ -80,7 +80,7 @@ public class DKImageManager: DKBaseManager {
 	
 	public var autoDownloadWhenAssetIsInCloud = true
 	
-    public lazy var groupDataManager: DKGroupDataManager! = {
+    public lazy private(set) var groupDataManager: DKGroupDataManager! = {
         return DKGroupDataManager()
     }()
 	

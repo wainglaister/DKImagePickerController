@@ -60,7 +60,7 @@ class DKAssetGroupCell: UITableViewCell {
         return selectedBackgroundView
     }()
     
-    lazy var customSeparator: DKAssetGroupSeparator = {
+    lazy private(set) var customSeparator: DKAssetGroupSeparator = {
         let separator = DKAssetGroupSeparator(frame: CGRect(x: 10, y: self.bounds.height - 1, width: self.bounds.width, height: 0.5))
         
         separator.backgroundColor = UIColor.lightGray

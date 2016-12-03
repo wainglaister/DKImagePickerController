@@ -120,7 +120,7 @@ public enum DKImagePickerControllerSourceType : Int {
  */
 open class DKImagePickerController : UINavigationController {
 
-	lazy public var UIDelegate: DKImagePickerControllerUIDelegate = {
+	lazy private(set) public var UIDelegate: DKImagePickerControllerUIDelegate = {
 		return DKImagePickerControllerDefaultUIDelegate()
 	}()
 
