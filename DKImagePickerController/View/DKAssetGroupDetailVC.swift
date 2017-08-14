@@ -27,22 +27,22 @@ private extension UICollectionView {
 // Show all images in the asset group
 open class DKAssetGroupDetailVC: UIViewController, UICollectionViewDelegate, UICollectionViewDataSource, DKGroupDataManagerObserver {
     	
-    public lazy var selectGroupButton: UIButton = {
+    @objc public lazy var selectGroupButton: UIButton = {
         let button = UIButton()
 		
-		let globalTitleColor = UINavigationBar.appearance().titleTextAttributes?[NSForegroundColorAttributeName] as? UIColor
+		let globalTitleColor = UINavigationBar.appearance().titleTextAttributes?[NSAttributedStringKey.foregroundColor] as? UIColor
 		button.setTitleColor(globalTitleColor ?? UIColor.black, for: .normal)
 		
-		let globalTitleFont = UINavigationBar.appearance().titleTextAttributes?[NSFontAttributeName] as? UIFont
+		let globalTitleFont = UINavigationBar.appearance().titleTextAttributes?[NSAttributedStringKey.font] as? UIFont
 		button.titleLabel!.font = globalTitleFont ?? UIFont.boldSystemFont(ofSize: 18.0)
 		
 		button.addTarget(self, action: #selector(DKAssetGroupDetailVC.showGroupSelector), for: .touchUpInside)
         return button
     }()
 		
-    internal var collectionView: UICollectionView!
-    internal weak var imagePickerController: DKImagePickerController!
-    public var selectedGroupId: String?
+    @objc internal var collectionView: UICollectionView!
+    @objc internal weak var imagePickerController: DKImagePickerController!
+    @objc public var selectedGroupId: String?
 	private var groupListVC: DKAssetGroupListVC!
     private var hidesCamera: Bool = false
 	private var footerView: UIView?
@@ -106,7 +106,7 @@ open class DKAssetGroupDetailVC: UIViewController, UICollectionViewDelegate, UIC
 		}
 	}
 	
-	internal func checkPhotoPermission() {
+	@objc internal func checkPhotoPermission() {
 		func photoDenied() {
 			self.view.addSubview(DKPermissionView.permissionView(.photo))
 			self.view.backgroundColor = UIColor.black
@@ -127,7 +127,7 @@ open class DKAssetGroupDetailVC: UIViewController, UICollectionViewDelegate, UIC
 		}
 	}
 	
-    func selectAssetGroup(_ groupId: String?) {
+    @objc func selectAssetGroup(_ groupId: String?) {
         if self.selectedGroupId == groupId {
             self.updateTitleView()
             return
@@ -158,7 +158,7 @@ open class DKAssetGroupDetailVC: UIViewController, UICollectionViewDelegate, UIC
         }
     }
 	
-	open func updateTitleView() {
+	@objc open func updateTitleView() {
 		let group = getImageManager().groupDataManager.fetchGroupWithGroupId(self.selectedGroupId!)
 		self.title = group.groupName
 		
@@ -170,11 +170,11 @@ open class DKAssetGroupDetailVC: UIViewController, UICollectionViewDelegate, UIC
 		self.navigationItem.titleView = self.selectGroupButton
 	}
     
-    func showGroupSelector() {
+    @objc func showGroupSelector() {
         DKPopoverViewController.popoverViewController(self.groupListVC, fromView: self.selectGroupButton)
     }
     
-    func fetchAsset(for index: Int) -> DKAsset? {
+    @objc func fetchAsset(for index: Int) -> DKAsset? {
         if !self.hidesCamera && index == 0 {
             return nil
         }
@@ -184,14 +184,14 @@ open class DKAssetGroupDetailVC: UIViewController, UICollectionViewDelegate, UIC
     }
     
     //select an asset at a specific index
-    public func selectAsset(atIndex indexPath: IndexPath) {
+    @objc public func selectAsset(atIndex indexPath: IndexPath) {
         let selectedAsset = (collectionView.cellForItem(at: indexPath) as? DKAssetGroupDetailBaseCell)
         if let ss = selectedAsset {
             selectAsset(cellToSelect: ss)
         }
     }
     
-    public func selectAsset(cellToSelect cell:DKAssetGroupDetailBaseCell) {
+    @objc public func selectAsset(cellToSelect cell:DKAssetGroupDetailBaseCell) {
         guard let ast = cell.asset else {
             return
         }
@@ -200,13 +200,13 @@ open class DKAssetGroupDetailVC: UIViewController, UICollectionViewDelegate, UIC
         cell.index = self.imagePickerController.selectedAssets.count - 1
     }
     
-    func isCameraCell(indexPath: IndexPath) -> Bool {
+    @objc func isCameraCell(indexPath: IndexPath) -> Bool {
         return indexPath.row == 0 && !self.hidesCamera
     }
 	
     // MARK: - Cells
     
-    func registerCellIfNeeded(cellClass: DKAssetGroupDetailBaseCell.Type) {
+    @objc func registerCellIfNeeded(cellClass: DKAssetGroupDetailBaseCell.Type) {
         let cellReuseIdentifier = cellClass.cellReuseIdentifier()
         
         if !self.registeredCellIdentifiers.contains(cellReuseIdentifier) {
@@ -215,7 +215,7 @@ open class DKAssetGroupDetailVC: UIViewController, UICollectionViewDelegate, UIC
         }
     }
     
-    func dequeueReusableCell(for indexPath: IndexPath) -> DKAssetGroupDetailBaseCell {
+    @objc func dequeueReusableCell(for indexPath: IndexPath) -> DKAssetGroupDetailBaseCell {
         let asset = self.fetchAsset(for: indexPath.row)!
         
         let cellClass: DKAssetGroupDetailBaseCell.Type!
@@ -232,7 +232,7 @@ open class DKAssetGroupDetailVC: UIViewController, UICollectionViewDelegate, UIC
         return cell
     }
     
-    func dequeueReusableCameraCell(for indexPath: IndexPath) -> DKAssetGroupDetailBaseCell {
+    @objc func dequeueReusableCameraCell(for indexPath: IndexPath) -> DKAssetGroupDetailBaseCell {
         let cellClass = self.imagePickerController.UIDelegate.imagePickerControllerCollectionCameraCell()
         self.registerCellIfNeeded(cellClass: cellClass)
         
@@ -240,7 +240,7 @@ open class DKAssetGroupDetailVC: UIViewController, UICollectionViewDelegate, UIC
         return cell as! DKAssetGroupDetailBaseCell
     }
 	
-    func setup(assetCell cell: DKAssetGroupDetailBaseCell, for indexPath: IndexPath, with asset: DKAsset) {
+    @objc func setup(assetCell cell: DKAssetGroupDetailBaseCell, for indexPath: IndexPath, with asset: DKAsset) {
         cell.asset = asset
 		let tag = indexPath.row + 1
 		cell.tag = tag
@@ -347,14 +347,14 @@ open class DKAssetGroupDetailVC: UIViewController, UICollectionViewDelegate, UIC
     
     // MARK: - Asset Caching
     
-    var previousPreheatRect = CGRect.zero
+    @objc var previousPreheatRect = CGRect.zero
     
     fileprivate func resetCachedAssets() {
         getImageManager().stopCachingForAllAssets()
         self.previousPreheatRect = .zero
     }
 
-    func updateCachedAssets() {
+    @objc func updateCachedAssets() {
         // Update only if the view is visible.
         guard isViewLoaded && view.window != nil && self.selectedGroupId != nil else { return }
         

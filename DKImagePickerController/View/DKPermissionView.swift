@@ -14,7 +14,7 @@ open class DKPermissionView: UIView {
 	private let titleLabel = UILabel()
 	private let permitButton = UIButton()
 	
-	open class func permissionView(_ style: DKImagePickerControllerSourceType) -> DKPermissionView {
+	@objc open class func permissionView(_ style: DKImagePickerControllerSourceType) -> DKPermissionView {
 		
 		let permissionView = DKPermissionView()
 		permissionView.addSubview(permissionView.titleLabel)
@@ -49,7 +49,7 @@ open class DKPermissionView: UIView {
 		self.center = self.superview!.center
 	}
 	
-	open func gotoSettings() {
+	@objc open func gotoSettings() {
 		if let appSettings = URL(string: UIApplicationOpenSettingsURLString) {
 			UIApplication.shared.openURL(appSettings)
 		}
